@@ -1,0 +1,43 @@
+yarn watch :: will keep watch and compile ts-->js
+yarn dev:: whenever js changes, it will run the program
+
+
+* object–relational mapping (ORM)
+* 1234 - postgresql
+createdb -h localhost -p 5432 -U postgres lireddit
+
+https://mikro-orm.io/docs/defining-entities
+
+Create table:: migrations::  
+    https://mikro-orm.io/docs/installation/#setting-up-the-commandline-tool
+
+    mikro-orm.config.ts --> all config (migration and db connection)
+    npx mikro-orm migration:create:: will create migrations.ts file.. which will be executed
+
+yarn add express
+yarn add apollo-server-express
+yarn add graphql
+yarn add type-graphql
+yarn add @types/express
+
+graphql endpoint with apollo-express-server
+
+if never used, make it _ (best practice)
+
+URL Routes vs GraphQL Schema
+both REST and GraphQL APIs are just fancy ways to call functions over a network.
+instead of having multiple “dumb” endpoints, have a single “smart” endpoint that can take in complex queries, and then massage the data output into whatever shape the client requires.
+
+**https://medium.com/free-code-camp/so-whats-this-graphql-thing-i-keep-hearing-about-baf4d36c20cf
+a GraphQL API is organized around three main building blocks: 
+1. the schema, 
+2. queries, and 
+3. resolvers: your GraphQL server won’t know what to do with an
+                 incoming query unless you tell it using a resolver.
+                 As you’ve seen you can write any code you want inside a resolver. 
+                 Which is why you can also make them modify the contents of 
+                 your database, in which case they’re known as mutation resolvers.
+
+        ** GraphQL is a specification, meaning you can use GraphQL implementations without running a single line of code written by Facebook.
+
+
