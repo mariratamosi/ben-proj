@@ -50,5 +50,9 @@ mutation: for update/inserting data
 
 Register: Authentication
 
-- Create new user
+- Add entity
+- Add to DB: by script
+    migration.ts::: 
+    if it's match with current db,
+    if not, runs the sql commands
 
