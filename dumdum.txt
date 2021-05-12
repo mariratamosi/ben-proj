@@ -47,3 +47,8 @@ GraphQL:
 queries: for getting data
 mutation: for update/inserting data
 
+
+Register: Authentication
+
+- Create new user
+

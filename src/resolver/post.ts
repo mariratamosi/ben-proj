@@ -29,7 +29,7 @@ export class PostResolver {
     return post;
   }
 
-  @Mutation(() => Post) //graphql -type
+  @Mutation(() => Post, { nullable: true }) //graphql -type
   async updatePost(
     @Arg("id", () => Int) _id: number,
     @Arg("title") title: string,
