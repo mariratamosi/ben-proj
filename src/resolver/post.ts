@@ -28,4 +28,32 @@ export class PostResolver {
 
     return post;
   }
+
+  @Mutation(() => Post) //graphql -type
+  async updatePost(
+    @Arg("id", () => Int) _id: number,
+    @Arg("title") title: string,
+    @Ctx() { em }: MyContext
+  ): Promise<Post | null> {
+    const post = await em.findOne(Post, { _id });
+
+    if (!post) {
+      return null;
+    }
+
+    if (typeof title != "undefined") {
+      post.title = title;
+    }
+
+    return post;
+  }
+
+  @Mutation(() => Boolean) //graphql -type
+  async deletePost(
+    @Arg("id", () => Int) _id: number,
+    @Ctx() { em }: MyContext
+  ): Promise<Boolean> {
+    await em.nativeDelete(Post, { _id });
+    return true;
+  }
 }
