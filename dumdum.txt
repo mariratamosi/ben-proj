@@ -43,3 +43,7 @@ a GraphQL API is organized around three main building blocks:
 
 Mikro-orm+Apollo+GraphQL
 
+GraphQL: 
+queries: for getting data
+mutation: for update/inserting data
+
