@@ -28,7 +28,7 @@ class FieldError {
   field: string;
 
   @Field()
-  error: string;
+  message: string;
 }
 
 @ObjectType()
@@ -47,19 +47,60 @@ export class UserResolver {
     return em.find(User, {});
   }
 
-  @Mutation(() => User) //graphql -type
+  @Mutation(() => UserResponse) //graphql -type
   async register(
     @Arg("options") options: UsernamePasswordInput,
     @Ctx() { em }: MyContext
-  ): Promise<User | null> {
+  ): Promise<UserResponse > {
+
+    if (options.username.length<3){
+      return {
+        errors: [
+          {
+            field: "Username",
+            message: "Length should be greater than 3",
+          },
+        ],
+
+      }
+    }
+
+    if (options.password.length<3){
+      return {
+        errors: [
+          {
+            field: "password",
+            message: "Length should be greater than 3",
+          },
+        ],
+      }
+    }
+
     const hashedPassword = await argon2.hash(options.password);
     const user = em.create(User, {
       username: options.username,
       password: hashedPassword,
     });
+    try{
     await em.persistAndFlush(user);
+    }
+    catch(err){
+      console.log(err.code)
 
-    return user;
+      if (err.code==="23505"){
+        return {
+          errors: [
+            {
+              field: "username",
+              message: "Already exist",
+            },
+          ],
+        }
+      }
+    }
+    return {
+      user
+    }
   }
 
   @Mutation(() => UserResponse) //graphql -type
@@ -74,7 +115,7 @@ export class UserResolver {
         errors: [
           {
             field: "Username",
-            error: "Not found",
+            message: "Not found",
           },
         ],
       };
@@ -87,7 +128,7 @@ export class UserResolver {
         errors: [
           {
             field: "Password",
-            error: "Incorrect",
+            message: "Incorrect",
           },
         ],
       };
