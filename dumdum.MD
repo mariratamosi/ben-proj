@@ -77,6 +77,8 @@ GraphQL:
 queries: for getting data
 mutation: for update/inserting data
 
+![WhatsApp Image 2021-06-27 at 05 09 30](https://user-images.githubusercontent.com/31970636/123528046-72290a80-d706-11eb-831b-f02f852bb4f2.jpeg)
+
 ## Register: Authentication
 
 ================================
