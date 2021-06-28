@@ -1,4 +1,3 @@
-import { Post } from "../entities/Post";
 import { User } from "../entities/User";
 import {
   Resolver,
@@ -10,6 +9,7 @@ import {
   Query,
   ObjectType,
 } from "type-graphql";
+
 import argon2 from "argon2";
 import { MyContext } from "../types";
 
@@ -42,6 +42,17 @@ class UserResponse {
 
 @Resolver()
 export class UserResolver {
+  @Query(() => User, { nullable: true })
+  async me(@Ctx() { req, em }: MyContext) {
+    if (!req.session.userId) {
+      return null;
+    }
+
+    const user = await em.findOne(User, { id: req.session.userId });
+
+    return user;
+  }
+
   @Query(() => [User])
   users(@Ctx() { em }: MyContext): Promise<User[]> {
     return em.find(User, {});
@@ -51,9 +62,8 @@ export class UserResolver {
   async register(
     @Arg("options") options: UsernamePasswordInput,
     @Ctx() { em }: MyContext
-  ): Promise<UserResponse > {
-
-    if (options.username.length<3){
+  ): Promise<UserResponse> {
+    if (options.username.length < 3) {
       return {
         errors: [
           {
@@ -61,11 +71,10 @@ export class UserResolver {
             message: "Length should be greater than 3",
           },
         ],
-
-      }
+      };
     }
 
-    if (options.password.length<3){
+    if (options.password.length < 3) {
       return {
         errors: [
           {
@@ -73,7 +82,7 @@ export class UserResolver {
             message: "Length should be greater than 3",
           },
         ],
-      }
+      };
     }
 
     const hashedPassword = await argon2.hash(options.password);
@@ -81,13 +90,12 @@ export class UserResolver {
       username: options.username,
       password: hashedPassword,
     });
-    try{
-    await em.persistAndFlush(user);
-    }
-    catch(err){
-      console.log(err.code)
+    try {
+      await em.persistAndFlush(user);
+    } catch (err) {
+      console.log(err.code);
 
-      if (err.code==="23505"){
+      if (err.code === "23505") {
         return {
           errors: [
             {
@@ -95,18 +103,18 @@ export class UserResolver {
               message: "Already exist",
             },
           ],
-        }
+        };
       }
     }
     return {
-      user
-    }
+      user,
+    };
   }
 
   @Mutation(() => UserResponse) //graphql -type
   async login(
     @Arg("options") options: UsernamePasswordInput,
-    @Ctx() { em }: MyContext
+    @Ctx() { em, req }: MyContext
   ): Promise<UserResponse | null> {
     const user = await em.findOne(User, { username: options.username });
 
@@ -133,8 +141,11 @@ export class UserResolver {
         ],
       };
     }
+
+    req.session.userId = user.id;
+
     return {
-      user: user
-    }
-  
+      user: user,
+    };
+  }
 }

@@ -87,8 +87,12 @@ mutation: for update/inserting data
   if it's match with current db,
   if not, runs the sql commands
 
-* store cookie, session, token in browser
-* where to store? Redis cause it's fast
+## Session
+
+================================
+
+- store cookie, session, token in browser
+- where to store? Redis cause it's fast
   (you can choose any db, eg: postgresql)
 
 \*REDIS:
@@ -96,4 +100,9 @@ https://divyanshushekhar.com/how-to-install-redis-on-windows-10/
 install msi
 run cli from zip extracted files
 
-    connect redis
+Middleware: connect-redis
+
+**_ SET graphQL settings "request.credentials": "include",
+_** yarn watch
+\*\*\* yarn dev
+-\_-
