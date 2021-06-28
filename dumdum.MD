@@ -106,3 +106,26 @@ Middleware: connect-redis
 _** yarn watch
 \*\*\* yarn dev
 -\_-
+
+### How session works?
+
+##### 1
+
+In redis
+session::key ---> {userId: 1}
+
+##### 2
+
+express-session set cookie as _encrypt(session::key)_
+
+##### 3
+
+this cookie is sent with each req from browser
+
+##### 4
+
+Server dycript the cookie _decrypt(encrypt(session::key))_ using the secret in app.use(session...)
+
+##### 5
+
+If needed server makes request to Redis

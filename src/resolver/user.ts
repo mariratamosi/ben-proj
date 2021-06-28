@@ -44,6 +44,7 @@ class UserResponse {
 export class UserResolver {
   @Query(() => User, { nullable: true })
   async me(@Ctx() { req, em }: MyContext) {
+    console.log(req.session);
     if (!req.session.userId) {
       return null;
     }
@@ -143,6 +144,7 @@ export class UserResolver {
     }
 
     req.session.userId = user.id;
+    req.session.randomKey = "rima is cool";
 
     return {
       user: user,
